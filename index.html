@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        canvas {
+            border: 1px solid #f00;
+        }
+    </style>
+</head>
+<body>
+<canvas id="cvs"></canvas>
+<script src="js/util.js"></script>
+<script src="js/Sky.js"></script>
+<script src="js/Lang.js"></script>
+<script src="js/Bird.js"></script>
+<script src="js/Pipe.js"></script>
+<script src="js/gameScene.js"></script>
+<script src="js/overScene.js"></script>
+<script>
+    var cvs = document.getElementById('cvs');
+    var ctx = cvs.getContext('2d');
+    util.loadImg({
+        'bird': "./img/bird.png",
+        'lang': "./img/land.png",
+        'pipeDown': "./img/pipeDown.png",
+        'pipeUp': "./img/pipeUp.png",
+        'sky': "./img/sky.png"
+    }, function (imgObj) {
+
+        //添加游戏场景
+        var gameScene = getGameScene(ctx, imgObj);
+        //添加游戏结束场景
+        var overScene = getOverScene(ctx);
+
+        var fly = true;
+        //给小鸟添加听众，当小鸟死亡的时候，执行什么
+        gameScene.addListener(function () {
+            fly = false;
+            overScene.draw();
+        })
+
+        (function run() {
+            gameScene.draw();
+            if ( fly ) {
+                requestAnimationFrame( run );
+            }
+        }());
+    })
+</script>
+</body>
+</html>
